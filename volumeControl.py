@@ -29,6 +29,7 @@ vol = 0
 volumeBar = 400
 volumePct = 0
 volumeBarDimensions = [75, 275]
+# length = 0
 
 while True:
     sucess, image = cap.read()
@@ -47,7 +48,6 @@ while True:
         cv2.circle(image, (cx, cy), 6, (0, 255, 0), cv2.FILLED)
 
         length = math.hypot(x2 - x1, y2 - y1)  # Distance between THUMB_TIP (id: 4) and INDEX_FINGER_TIP (id: 8)
-        print(length)
 
         handRange = [30, 265]
 
@@ -57,12 +57,14 @@ while True:
 
         volume.SetMasterVolumeLevelScalar(volumePct / 100.0, None)
 
+        cv2.rectangle(image, (35, int(volumeBar)), volumeBarDimensions, (0, 255, 0), cv2.FILLED)
+        print(f"{round(volumePct, 3)}%; {round(length, 6)}px")
+
         if (length < 35):
             cv2.circle(image, (cx, cy), 8, (0, 255, 0), cv2.FILLED)  # BGR color
 
     # Volume bar
     cv2.rectangle(image, (35, 75), volumeBarDimensions, (0, 255, 0), 3)
-    cv2.rectangle(image, (35, int(volumeBar)), volumeBarDimensions, (0, 255, 0), cv2.FILLED)
     cv2.putText(image, f"{int(volumePct)} %", (35, 300), cv2.FONT_HERSHEY_PLAIN, 1.5, (253, 253, 253), 1)  # image, text, pos (x, y), font, scale, color, thickness)
 
     currentT = time.time()

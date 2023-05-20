@@ -1,37 +1,27 @@
 import cv2
-import mediapipe
 import time
+from handTracker_py.handTracker import handTracker
 
-cap = cv2.VideoCapture(0)
-
-mpHands = mediapipe.solutions.hands
-hands = mpHands.Hands()
-mpDraw = mediapipe.solutions.drawing_utils
 
 previousTime = 0
 currentTime = 0
-
+cap = cv2.VideoCapture(0)
+tracker = handTracker()
 
 while True:
     success, image = cap.read()
-    imageRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    results = hands.process(imageRGB)
 
-    if (results.multi_hand_landmarks):
-        for handLandmarks in results.multi_hand_landmarks:
-            for id, landmark in enumerate(handLandmarks.landmark):
-                height, width, channel = image.shape
-                cx, cy = int(landmark.x*width), int(landmark.y*height)
-                print(id, cx, cy)
-                cv2.circle(image, (cx, cy), 5, (0, 255, 0), 2)  # img, center, radius, color, thickness
+    image = tracker.findHands(image)
+    landmarks = tracker.getPos(image)
 
-            mpDraw.draw_landmarks(image, handLandmarks, mpHands.HAND_CONNECTIONS)
+    if (len(landmarks) != 0):
+        print(landmarks[4])
 
     currentTime = time.time()
     fps = 1 / (currentTime - previousTime)
     previousTime = currentTime
 
-    cv2.putText(image, str(round(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 2, (253, 253, 253), cv2.FILLED)  # pos, font, scale, color, thickness)
+    cv2.putText(image, str(round(fps)) + " fps", (20, 70), cv2.FONT_HERSHEY_PLAIN, 1.5, (253, 253, 253), 1)  # image, text, pos (x, y), font, scale, color, thickness)
 
-    cv2.imshow("GestureVol (CPU) Preview", image)
+    cv2.imshow("HandTracker (CPU) Preview", image)
     cv2.waitKey(1)
