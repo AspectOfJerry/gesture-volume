@@ -1,0 +1,3 @@
+[submodule "handTracker_py"]
+	path = handTracker_py
+	url = https://github.com/AspectOfJerry/handTracker_py.git
