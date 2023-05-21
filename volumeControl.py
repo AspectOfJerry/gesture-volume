@@ -26,9 +26,9 @@ volume = interface.QueryInterface(IAudioEndpointVolume)
 # volume.GetMute()
 # volume.GetMasterVolumeLevel()
 vol = 0
-volumeBar = 400
-volumePct = 0
 volumeBarDimensions = [75, 275]
+volumeBar = volumeBarDimensions[0]
+volumePct = 0
 # length = 0
 
 while True:
