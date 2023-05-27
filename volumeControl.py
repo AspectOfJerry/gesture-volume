@@ -10,9 +10,9 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 # Adjust webcam resolution
 camWidth, camHeight = 360, 480
 
-cap = cv2.VideoCapture(0)  # Webcam id
-cap.set(3, camWidth)
-cap.set(4, camHeight)
+cam = cv2.VideoCapture(0)  # Webcam id
+cam.set(3, camWidth)
+cam.set(4, camHeight)
 currentT = 0
 previousT = 0
 
@@ -32,8 +32,9 @@ volumePct = 0
 # length = 0
 
 while True:
-    sucess, image = cap.read()
+    sucess, image = cam.read()
     image = detector.findHands(image)
+    image = cv2.flip(image, 1)
     landmarks = detector.getPos(image, draw=False)
 
     if (len(landmarks) != 0):
